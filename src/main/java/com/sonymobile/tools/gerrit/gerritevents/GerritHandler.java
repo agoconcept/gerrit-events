@@ -417,9 +417,13 @@ public class GerritHandler implements Coordinator, Handler {
     @Override
     public void addListener(GerritEventListener listener) {
         synchronized (this) {
+            logger.warn("UDMLOG - Trying to add new listener: {}", listener);
             if (!gerritEventListeners.add(listener)) {
                 logger.warn("The listener was doubly-added: {}", listener);
+            } else {
+                logger.warn("UDMLOG - New listener added successfully: {}", listener);
             }
+            logger.warn("UDMLOG - Number of event listeners: {}", this.getEventListenersCount());
         }
     }
 
@@ -440,14 +444,18 @@ public class GerritHandler implements Coordinator, Handler {
      */
     public void addEventListeners(Collection<? extends GerritEventListener> listeners) {
         synchronized (this) {
+            logger.warn("UDMLOG - Adding all event listeners");
             gerritEventListeners.addAll(listeners);
+            logger.warn("UDMLOG - Number of event listeners: {}", this.getEventListenersCount());
         }
     }
 
     @Override
     public void removeListener(GerritEventListener listener) {
         synchronized (this) {
+            logger.warn("UDMLOG - Removing event listener: {}", listener);
             gerritEventListeners.remove(listener);
+            logger.warn("UDMLOG - Number of event listeners: {}", this.getEventListenersCount());
         }
     }
 
@@ -458,8 +466,10 @@ public class GerritHandler implements Coordinator, Handler {
      */
     public Collection<GerritEventListener> removeAllEventListeners() {
         synchronized (this) {
+            logger.warn("UDMLOG - Removing all event listeners");
             HashSet<GerritEventListener> listeners = new HashSet<GerritEventListener>(gerritEventListeners);
             gerritEventListeners.clear();
+            logger.warn("UDMLOG - Number of event listeners: {}", this.getEventListenersCount());
             return listeners;
         }
     }
